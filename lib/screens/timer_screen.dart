@@ -1,4 +1,5 @@
-// lib/screens/timer_screen.dart - STUB (will be replaced in Task 6)
+// STUB: This file will be completely replaced in Task 6.
+// It exists solely to allow HomeScreen to compile and the navigation test to pass.
 import 'package:flutter/material.dart';
 
 class TimerScreen extends StatelessWidget {
@@ -8,10 +9,12 @@ class TimerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: TextButton(
-        onPressed: () {},
-        child: const Text('그만할래'),
-      )),
+      body: Center(
+        child: TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('그만할래'),
+        ),
+      ),
     );
   }
 }

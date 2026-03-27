@@ -23,10 +23,19 @@ void main() {
 
   testWidgets('5분 버튼 탭 시 선택 상태로 변경', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+    // 초기 상태: 25분이 선택되어 있음 (kPointColor 배경)
+    // 5분 탭 후: 5분이 선택, 25분은 비선택 상태로 변경
     await tester.tap(find.text('5분'));
     await tester.pump();
-    // 탭 후 에러 없이 화면 유지 확인
-    expect(find.text('5분'), findsOneWidget);
+    // 5분 버튼 컨테이너가 선택색(kPointColor)을 갖는지 확인
+    final selectedButton = tester.widget<Container>(
+      find.ancestor(
+        of: find.text('5분'),
+        matching: find.byType(Container),
+      ).first,
+    );
+    final decoration = selectedButton.decoration as BoxDecoration;
+    expect(decoration.color, const Color(0xFFFFB7C5)); // kPointColor
   });
 
   testWidgets('시작하기 버튼 탭 시 TimerScreen으로 이동', (tester) async {
