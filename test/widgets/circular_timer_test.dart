@@ -35,4 +35,15 @@ void main() {
     );
     expect(find.text('00:00'), findsOneWidget);
   });
+
+  testWidgets('progress > 1.0 은 클램핑되어 에러 없음', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: CircularTimer(progress: 1.5, timeText: '00:00'),
+        ),
+      ),
+    );
+    expect(find.text('00:00'), findsOneWidget);
+  });
 }
