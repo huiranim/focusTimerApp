@@ -24,11 +24,11 @@ void main() {
     test('successMessage에 분 포함', () {
       expect(successMessage(10), '10분 집중 성공!! 고생했어 🎉');
     });
-    test('failConfirmMessage에 경과 분 포함', () {
-      expect(failConfirmMessage(3), '지금 3분 버텼어, 여기서 끝낼거야?');
+    test('failConfirmMessage에 경과 분+초 포함', () {
+      expect(failConfirmMessage(3, 30), '지금 3분 30초 버텼어, 여기서 끝낼거야?');
     });
-    test('0분 경과 시 failConfirmMessage', () {
-      expect(failConfirmMessage(0), '지금 0분 버텼어, 여기서 끝낼거야?');
+    test('0분 0초 경과 시 failConfirmMessage', () {
+      expect(failConfirmMessage(0, 0), '지금 0분 0초 버텼어, 여기서 끝낼거야?');
     });
   });
 }

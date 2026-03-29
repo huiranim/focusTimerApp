@@ -22,4 +22,5 @@ String formatTime(int totalSeconds) {
 // UX 메시지
 String startMessage(int minutes) => '화이팅! $minutes분 후에 만나자 💪';
 String successMessage(int minutes) => '$minutes분 집중 성공!! 고생했어 🎉';
-String failConfirmMessage(int minutes) => '지금 $minutes분 버텼어, 여기서 끝낼거야?';
+String failConfirmMessage(int minutes, int seconds) =>
+    '지금 ${minutes}분 ${seconds}초 버텼어, 여기서 끝낼거야?';

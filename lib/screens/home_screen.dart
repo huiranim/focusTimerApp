@@ -106,7 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () => setState(() => _selectedMinutes = min),
                       )),
                   _TimeButton(
-                    label: '직접입력',
+                    label: !kTimeOptions.contains(_selectedMinutes)
+                        ? '$_selectedMinutes분'
+                        : '직접입력',
                     selected: !kTimeOptions.contains(_selectedMinutes),
                     onTap: _showCustomTimePicker,
                   ),

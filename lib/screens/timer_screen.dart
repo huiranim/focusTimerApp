@@ -24,6 +24,7 @@ class _TimerScreenState extends State<TimerScreen> {
   Timer? _startMessageTimer;
   Timer? _successTimer;
   bool _showStartMessage = true;
+  bool _isDialogOpen = false;
   InterstitialAd? _interstitialAd;
 
   @override
@@ -79,6 +80,10 @@ class _TimerScreenState extends State<TimerScreen> {
       setState(() => _remainingSeconds--);
       if (_remainingSeconds <= 0) {
         timer.cancel();
+        if (_isDialogOpen) {
+          _isDialogOpen = false;
+          Navigator.of(context).pop(); // 다이얼로그 자동 닫기 → 성공 처리
+        }
         _onSuccess();
       }
     });
@@ -102,12 +107,15 @@ class _TimerScreenState extends State<TimerScreen> {
   }
 
   void _showExitDialog() {
-    _timer?.cancel();
+    // 타이머는 계속 진행 (_timer 취소 안 함)
     _startMessageTimer?.cancel();
     _successTimer?.cancel();
-    // 경과 시간(분) 계산
-    final elapsedMinutes = ((_totalSeconds - _remainingSeconds) / 60).floor();
 
+    final elapsed = _totalSeconds - _remainingSeconds;
+    final elapsedMinutes = elapsed ~/ 60;
+    final elapsedSeconds = elapsed % 60;
+
+    _isDialogOpen = true;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -119,7 +127,7 @@ class _TimerScreenState extends State<TimerScreen> {
             const HamconCharacter(state: HamconState.fail, size: 80),
             const SizedBox(height: 16),
             Text(
-              failConfirmMessage(elapsedMinutes),
+              failConfirmMessage(elapsedMinutes, elapsedSeconds),
               textAlign: TextAlign.center,
               style: const TextStyle(color: kTextColor, fontSize: 16),
             ),
@@ -128,8 +136,7 @@ class _TimerScreenState extends State<TimerScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context); // 다이얼로그 닫기
-              _startTimer();          // 타이머 재개
+              Navigator.pop(context); // 다이얼로그만 닫기 (타이머 이미 진행 중)
             },
             child: const Text(
               '계속할래',
@@ -138,6 +145,7 @@ class _TimerScreenState extends State<TimerScreen> {
           ),
           TextButton(
             onPressed: () {
+              _timer?.cancel();
               setState(() => _state = _TimerState.fail);
               Navigator.pop(context); // 다이얼로그 닫기
               Navigator.pop(context); // 타이머 화면 닫기 (광고 없음)
@@ -149,7 +157,9 @@ class _TimerScreenState extends State<TimerScreen> {
           ),
         ],
       ),
-    );
+    ).whenComplete(() {
+      _isDialogOpen = false;
+    });
   }
 
   @override
