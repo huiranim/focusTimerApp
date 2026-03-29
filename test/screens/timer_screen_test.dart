@@ -53,4 +53,35 @@ void main() {
     expect(find.text('그만할래'), findsOneWidget);
     expect(find.text('계속할래'), findsNothing);
   });
+
+  testWidgets('다이얼로그에서 끝낼래 탭 시 화면 종료', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => TextButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (_) => const TimerScreen(minutes: 25),
+              ));
+            },
+            child: const Text('go'),
+          ),
+        ),
+      ),
+    );
+    // TimerScreen으로 이동
+    await tester.tap(find.text('go'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    // 종료 다이얼로그 열기
+    await tester.tap(find.text('그만할래'));
+    await tester.pump();
+    expect(find.text('끝낼래'), findsOneWidget);
+    // 끝낼래 탭
+    await tester.tap(find.text('끝낼래'));
+    await tester.pumpAndSettle();
+    // TimerScreen이 닫혀서 'go' 버튼으로 돌아와야 함
+    expect(find.text('go'), findsOneWidget);
+    expect(find.text('그만할래'), findsNothing);
+  });
 }

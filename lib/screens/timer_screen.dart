@@ -104,6 +104,8 @@ class _TimerScreenState extends State<TimerScreen> {
 
   void _showExitDialog() {
     _timer?.cancel();
+    _startMessageTimer?.cancel();
+    _successTimer?.cancel();
     // 경과 시간(분) 계산
     final elapsedMinutes = ((_totalSeconds - _remainingSeconds) / 60).floor();
 
