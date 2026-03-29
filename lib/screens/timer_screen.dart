@@ -6,7 +6,7 @@ import '../constants.dart';
 import '../widgets/hamcon_character.dart';
 import '../widgets/circular_timer.dart';
 
-enum _TimerState { running, success }
+enum _TimerState { running, success, fail }
 
 class TimerScreen extends StatefulWidget {
   final int minutes;
@@ -76,11 +76,10 @@ class _TimerScreenState extends State<TimerScreen> {
         timer.cancel();
         return;
       }
-      if (_remainingSeconds <= 1) {
+      setState(() => _remainingSeconds--);
+      if (_remainingSeconds <= 0) {
         timer.cancel();
         _onSuccess();
-      } else {
-        setState(() => _remainingSeconds = (_remainingSeconds - 1).clamp(0, _totalSeconds));
       }
     });
   }
@@ -139,6 +138,7 @@ class _TimerScreenState extends State<TimerScreen> {
           ),
           TextButton(
             onPressed: () {
+              setState(() => _state = _TimerState.fail);
               Navigator.pop(context); // 다이얼로그 닫기
               Navigator.pop(context); // 타이머 화면 닫기 (광고 없음)
             },
